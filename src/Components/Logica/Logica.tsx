@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { useAppDispatch } from "../hooks";
-import { addPatientAction } from "../features/slices/Appointments";
-import { appointments } from "../Interfaces/interfaces";
-import "../Styles/styles.css";
+import { useAppDispatch } from "../../hooks";
+import { addPatientAction } from "../../features/slices/Appointments";
+import { appointments } from "../../Interfaces/interfaces";
 
 export const Logica = () => {
   const dispatch = useAppDispatch();

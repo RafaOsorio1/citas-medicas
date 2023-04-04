@@ -2,10 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deletePatient,
   pacientesSelector,
-} from "../features/slices/Appointments";
+} from "../../features/slices/Appointments";
 import React from "react";
-import "../Styles/styles.css";
-import { appointments } from "../Interfaces/interfaces";
+import { appointments } from "../../Interfaces/interfaces";
 
 
 

@@ -1,5 +1,4 @@
 import React from "react";
-import "../Styles/styles.css";
 
 export const Header = () => {
   return (
