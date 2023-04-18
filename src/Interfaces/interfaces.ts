@@ -21,3 +21,8 @@ export interface state {
     appointments: appointments[],
     deletedPatients: appointments[]
 }[]
+export interface propsContext{
+    isLogin: boolean
+    signUp: (e1: string, e2: string) => void
+    login: (e1: string, e2: string) => void
+}

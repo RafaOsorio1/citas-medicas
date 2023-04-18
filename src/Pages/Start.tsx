@@ -3,7 +3,7 @@ import { Login } from '../Components/Login/Login'
 
 export const Start = () => {
   return (
-    <section className=' ds flex'>
+    <section>
         <Login></Login>
     </section>
   )
