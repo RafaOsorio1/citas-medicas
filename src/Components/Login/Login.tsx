@@ -1,7 +1,9 @@
+import React from "react";
 import { useNavigate } from "react-router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../Context/AuthContext";
+import { loginWithEmailAndPassword } from "../../Interfaces/interfaces";
 type inputs = {
   email: string;
   password: string;
@@ -9,13 +11,8 @@ type inputs = {
 
 export const Login = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { loginWithEmailAndPassword } = useContext(AuthContext);
   const [error, setError] = useState("");
-  // const [user, setUser
-  // ] = useState({
-  //   email: "",
-  //   password: "",
-  // });
 
   const {
     register,
@@ -23,15 +20,25 @@ export const Login = () => {
     watch,
     formState: { errors },
   } = useForm<inputs>();
+
   const onSubmit: SubmitHandler<Record<string, string>> = async (data) => {
-    const email = data.email;
-    const password = data.password;
-    setError("")
+    const credentials = {
+      email: data.email,
+      password: data.password,
+    };
+    setError("");
     try {
-      await login(email, password);
+      await loginWithEmailAndPassword(credentials);
       navigate("/home");
     } catch (error: any) {
-      setError("Credenciales invalidas");
+      if (error.code === "auth/user-not-found") {
+        setError("Este usuario no esta registrado");
+      } else if (error.code === "auth/invalid-email") {
+        setError("Ingresa un Correo valido");
+      } else if (error.code === "auth/wrong-password") {
+        setError("La contraseña no es correcta");
+      }
+      console.log(error.code);
     }
   };
   const handleClickRegister = () => {
@@ -39,11 +46,7 @@ export const Login = () => {
   };
   return (
     <>
-      {error && (
-        <div>
-          <p>{error}</p>
-        </div>
-      )}
+      {error && <div>{error}</div>}
       <div className="h-screen min-h-screen max-h-screen bg-gray-200 flex justify-center items-center p-4">
         <div className="bg-white w-full p-4 rounded shadow-2xl text-gray-700 sm:w-96">
           <div className="flex justify-end">

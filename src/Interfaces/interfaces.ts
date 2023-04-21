@@ -24,5 +24,9 @@ export interface state {
 export interface propsContext{
     isLogin: boolean
     signUp: (e1: string, e2: string) => void
-    login: (e1: string, e2: string) => void
+    loginWithEmailAndPassword: ({email, password}: loginWithEmailAndPassword) => void
+}
+export interface loginWithEmailAndPassword{
+    email: string,
+    password:string
 }

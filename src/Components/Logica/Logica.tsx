@@ -2,89 +2,60 @@ import React, { useState } from "react";
 import { useAppDispatch } from "../../hooks";
 import { addPatientAction } from "../../features/slices/Appointments";
 import { appointments } from "../../Interfaces/interfaces";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+type dataCita = {
+  name: string;
+  id: string;
+  date: string;
+  time: string;
+};
 
 export const Logica = () => {
-  const dispatch = useAppDispatch();
-  const [inputName, setInputName] = useState("");
-  const [inputID, setInputID] = useState("");
-  const [inputDate, setInputDate] = useState("");
-  const [inputTime, setInputTime] = useState("");
-  let patient: appointments = {};
-
-  //FUNCIÓN HANDLE DEL INPUT NAME
-
-  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputName(event.target.value);
-  };
-
-  //FUNCIÓN HANDLE DEL INPUT ID
-
-  const handleChangeInputID = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputID(event.target.value);
-  };
-
-  //FUNCIÓN HANDLE DEL INPUT DATE
-
-  const handleChangeInputDate = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setInputDate(event.target.value);
-  };
-
-  //FUNCIÓN HANDLE DEL INPUT TIME
-
-  const handleChangeInputTime = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    console.log(event.target.value);
-    setInputTime(event.target.value);
-  };
-
-  //FUNCIÓN HANDLE DEL BOTÓN AGREGAR PACIENTE
-
-  const handleClick = () => {
-    patient.name = inputName;
-    patient.ID = parseInt(inputID);
-    patient.date = inputDate;
-    patient.time = inputTime;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<dataCita>();
+  const onSubmit: SubmitHandler<Record<string, string>> = (data) => {
+    patient.name = data.name;
+    patient.ID = parseInt(data.id);
+    patient.date = data.date;
+    patient.time = data.time;
     dispatch(addPatientAction(patient));
   };
-
-  // FUNCIÓN HANDLE DEL BOTÓN VALIDAR FECHA
-
+  const dispatch = useAppDispatch();
+  let patient: appointments = {};
   return (
     <div>
       <div>
-        <form>
-          <label htmlFor="input-name">Name of patient</label>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <label htmlFor="input-name">Nombre del paciente</label>
           <input
             id="input-name"
             type="text"
-            value={inputName}
-            onChange={handleChangeInput}
+            {...register("name", { required: true })}
+            placeholder="Rafael Rodelo"
           />
-          <label htmlFor="input-ID">ID of Patient</label>
+          <label htmlFor="input-ID">Identificación</label>
           <input
             id="input-ID"
             type="number"
-            value={inputID}
-            onChange={handleChangeInputID}
+            {...register("id", { required: true })}
           />
-          <label htmlFor="input-date">Date available</label>
+          <label htmlFor="input-date">Fecha</label>
           <input
             id="input-date"
             type="date"
-            value={inputDate}
-            onChange={handleChangeInputDate}
+            {...register("date", { required: true })}
           />
-          <label htmlFor="input-time">Hour available</label>
+          <label htmlFor="input-time">Hora</label>
           <input
             id="input-time"
             type={"time"}
-            value={inputTime}
-            onChange={handleChangeInputTime}
+            {...register("time", { required: true })}
           />
-          <button id="button-get-data" onClick={handleClick} type="button">
+          <button id="button-get-data" type="submit">
             Program
           </button>
         </form>
