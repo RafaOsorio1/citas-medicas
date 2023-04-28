@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { SubmitHandler, useForm} from "react-hook-form";
-import { useAuth } from "../../Context/AuthContext";
+import React, { useState, useContext } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { AuthContext } from "../../Context/AuthContext";
 type inputs = {
   name: string;
   lastName: string;
@@ -10,7 +10,9 @@ type inputs = {
 };
 
 export const Register = () => {
-  const { signUp } = useAuth();
+
+
+  const {register: signUp} = useContext(AuthContext)
   const navigate = useNavigate();
   const [error, setError] = useState<string>("");
 
@@ -20,6 +22,7 @@ export const Register = () => {
     formState: { errors },
   } = useForm<inputs>();
   const onSubmit: SubmitHandler<Record<string, string>> = async (data) => {
+    const name = data.name;
     const email = data.email;
     const password = data.password;
     setError("");
@@ -29,8 +32,7 @@ export const Register = () => {
     } catch (error: any) {
       if (error.code === "auth/weak-password") {
         setError("La contraseña debe tener al menos 6 Caractéres");
-      }
-      else if (error.code === "auth/invalid-email"){
+      } else if (error.code === "auth/invalid-email") {
         setError("Correo electronico invalido");
       }
       console.log(error.code);
@@ -53,7 +55,7 @@ export const Register = () => {
             <input
               className="my-2 block w-full p-2 rounded shadow bg-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none"
               type="text"
-              {...register("name", {required: true})}
+              {...register("name", { required: true })}
               placeholder="Hortencio"
             />
             <label htmlFor="">Apellidos</label>

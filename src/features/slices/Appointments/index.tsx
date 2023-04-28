@@ -1,8 +1,22 @@
 import { createSlice, SliceCaseReducers } from "@reduxjs/toolkit";
 import { RootState } from "../../../store";
-import { appointments } from "../../../Interfaces/interfaces";
+import { appointments, UserAuht } from "../../../Interfaces/interfaces";
+import {db} from '../../../firebase/firebase'
+import { collection, addDoc, doc, setDoc } from "firebase/firestore";
+import {getCurrentUser} from '../../../firebase/getUser'
 
 const listPatient = JSON.parse(localStorage.getItem("CitasV1") || "[]");
+
+const fbStore = async (patient: appointments, user: UserAuht) => {
+  const email= user.email;
+  const uid = user.uid;
+  try {
+    const collectionRef = doc(collection(db, 'users', user.uid, 'citas'));
+    await setDoc(collectionRef, patient);
+  } catch (error: any) {
+    console.log('esta madre fallo ', error);
+  }
+}
 
 export const appointmentsSlice = createSlice<
   appointments[],
@@ -20,6 +34,7 @@ export const appointmentsSlice = createSlice<
       };
       state.push(patient);
       localStorage.setItem("CitasV1", JSON.stringify(state));
+      fbStore(patient, getCurrentUser())
     },
     deletePatient: (state, action) => {
       const newList = state.filter(item => item.ID !== action.payload.ID);

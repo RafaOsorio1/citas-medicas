@@ -5,7 +5,7 @@ import { appointmentsSlice } from './features/slices/Appointments';
 
 export const store = configureStore({
   reducer:{
-    appointmentsPatient: appointmentsSlice.reducer
+    appointmentsPatient: appointmentsSlice.reducer,
   }
 });
 

@@ -1,23 +1,20 @@
-import {db} from './firebase'
-import { auth } from './firebase'
-import { collection, doc, setDoc} from 'firebase/firestore'
+import { collection, addDoc, getFirestore } from 'firebase/firestore';
 
-const data = getUserInfo();
+// Obtener la instancia de Firestore
+const db = getFirestore();
 
-await setDoc(doc(db, 'Users', 'mercaderes' ), {
-    email: data?.email,
-    uid: data?.uid,
-    name: 'name',
-    citas: []
-})
+// Función para crear un nuevo documento en la colección 'Users'
+async function createUserDoc(email: string, uid: string, appointments: any[]) {
+  try {
+    // Agregar un nuevo documento a la colección 'Users'
+    const docRef = await addDoc(collection(db, 'Users'), {
+      email,
+      uid,
+      appointments
+    });
 
-
-function getUserInfo() {
-  const user = auth.currentUser
-  if (user) {
-    const { email, uid } = user
-    return { email, uid }
-  } else {
-    return null
+    console.log('Nuevo documento agregado con ID: ', docRef.id);
+  } catch (e) {
+    console.error('Error al agregar el documento: ', e);
   }
 }

@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import {
   propsContext,
   props,
@@ -8,8 +8,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../firebase/firebase";
+import { auth, db } from "../firebase/firebase";
 import { FirebaseError } from "firebase/app";
+import { doc, setDoc } from "firebase/firestore";
 export const AuthContext = createContext<propsContext>({} as propsContext);
 
 export const useAuth = () => {
@@ -17,11 +18,16 @@ export const useAuth = () => {
   return context;
 };
 
-export const AuthProvider = ({ children }: props): JSX.Element => {
-  const signUp = (email: string, password: string) =>
-    createUserWithEmailAndPassword(auth, email, password);
+export const AuthProvider =  ({ children }: props): JSX.Element => {
+  const register = async(email: string, password: string) => {
+    const data = await createUserWithEmailAndPassword(auth, email, password);
+    await setDoc(doc(db, "users", data.user.uid), {});
+  };
 
-  const loginWithEmailAndPassword = async ({email, password} : loginWithEmailAndPassword) => {
+  const loginWithEmailAndPassword = async ({
+    email,
+    password,
+  }: loginWithEmailAndPassword) => {
     const userCredential = await signInWithEmailAndPassword(
       auth,
       email,
@@ -29,21 +35,10 @@ export const AuthProvider = ({ children }: props): JSX.Element => {
     );
     return userCredential;
   };
-  // const loginWithEmailAndPassword = async ({
-  //   email,
-  //   password,
-  // }: loginWithEmailAndPassword) => {
-  //   try {
-  //     await signInWithEmailAndPassword(auth, email, password);
-  //   } catch (error) {
-  //     if (error instanceof FirebaseError) {
-  //       return console.log(error.message);
-  //     }
-  //   }
-  // };
+
   const value: propsContext = {
     isLogin: false,
-    signUp,
+    register,
     loginWithEmailAndPassword,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

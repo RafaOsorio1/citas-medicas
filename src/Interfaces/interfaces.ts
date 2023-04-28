@@ -6,6 +6,10 @@ export interface appointments {
     date?: string
     time?: string
 }
+// export interface user {
+//     email: string | null;
+//     uid: string | null;
+//   }
 export interface propsProvider{
     inputName: string
     setInputName: (e: string) => void
@@ -23,10 +27,27 @@ export interface state {
 }[]
 export interface propsContext{
     isLogin: boolean
-    signUp: (e1: string, e2: string) => void
+    register: (e1: string, e2: string) => void
     loginWithEmailAndPassword: ({email, password}: loginWithEmailAndPassword) => void
 }
 export interface loginWithEmailAndPassword{
     email: string,
     password:string
+}
+export interface UserAuht {
+    status?: string,
+    uid: string,
+    email: null | string,
+    displayName: null | string,
+    errorMessage?: null | string,
+    errorCode?: null | string,
+    sucess?: boolean,
+}
+export interface registerWithEmailPasswordI {
+    fullName: string,
+    email: string,
+    password: string
+}
+export interface userAuthLogOut {
+    errorMessage: any | string
 }
