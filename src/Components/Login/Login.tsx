@@ -50,11 +50,6 @@ export const Login = () => {
       <div className="h-screen min-h-screen max-h-screen bg-gray-200 flex justify-center items-center p-4">
         <div className="bg-white w-full p-4 rounded shadow-2xl text-gray-700 sm:w-96">
           <div className="flex justify-end">
-            <img
-              src="https://www.ns-logo.com/wp-content/uploads/2020/07/logo-icon-png-8.png"
-              alt=""
-              className="w-8"
-            />
           </div>
 
           <p className="text-center pb-2 text-3xl">Welcome</p>

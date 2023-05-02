@@ -9,7 +9,6 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth, db } from "../firebase/firebase";
-import { FirebaseError } from "firebase/app";
 import { doc, setDoc } from "firebase/firestore";
 export const AuthContext = createContext<propsContext>({} as propsContext);
 
@@ -18,8 +17,10 @@ export const useAuth = () => {
   return context;
 };
 
-export const AuthProvider =  ({ children }: props): JSX.Element => {
-  const register = async(email: string, password: string) => {
+
+export const AuthProvider = ({ children }: props): JSX.Element => {
+
+  const register = async (email: string, password: string) => {
     const data = await createUserWithEmailAndPassword(auth, email, password);
     await setDoc(doc(db, "users", data.user.uid), {});
   };
@@ -35,6 +36,8 @@ export const AuthProvider =  ({ children }: props): JSX.Element => {
     );
     return userCredential;
   };
+
+
 
   const value: propsContext = {
     isLogin: false,

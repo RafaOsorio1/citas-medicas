@@ -1,11 +1,21 @@
-import React, { useEffect } from "react";
-import { getCurrentUser } from "../../firebase/getUser";
+import React from "react";
+import { AuthContext } from "../../Context/AuthContext";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from "react-router";
 
 export const Header = () => {
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
+  const navigate = useNavigate();
 
+  const currentUser = getAuth();
+
+  const logOut = () => {
+    signOut (currentUser).then(() =>{
+      navigate('/');
+      console.log(currentUser);
+    }).catch((error: any) =>{
+      console.log(error);
+    })
+  };
 
   return (
     <header className=" m-2">
@@ -135,7 +145,7 @@ export const Header = () => {
           </div>
         </div>
       </nav>
-      <button>
+      <button onClick={() => {logOut()}}>
         logout
       </button>
     </header>
